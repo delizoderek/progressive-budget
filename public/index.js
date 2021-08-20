@@ -1,18 +1,21 @@
 let myChart;
-const init = async () => {
-  try {
-    const dataCall = await fetch("/api/transaction");
-    const dataJson = await dataCall.json();
-    if(dataJson){
-      transactions = dataJson;
+const init = () => {
+  fetch("/api/transaction")
+  .then(response => {
+    if(response.ok){
+      return response.json();
+    } else {
+      return [];
     }
-  } catch (error) {
-    console.log(error);
-  }
+  })
+  .then(data => {
+    // save db data on global variable
+    transactions = data;
 
-  populateTotal();
-  populateTable();
-  populateChart();
+    populateTotal();
+    populateTable();
+    populateChart();
+  });
 }
 
 function populateTotal() {
